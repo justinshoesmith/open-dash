@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
@@ -34,6 +35,14 @@ jobs:
 
       - name: Build debug APK
         run: ./gradlew assembleDebug
+
+      - name: Upload standard debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenDash-standard-debug
+          path: app/build/outputs/apk/standard/debug/app-standard-debug.apk
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Run unit tests
         run: ./gradlew test
